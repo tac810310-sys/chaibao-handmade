@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+import requests
 
 # --- 1. 網頁設定 (Page Config) ---
 st.set_page_config(
@@ -130,24 +131,47 @@ with st.form(key='order_form'):
     # 送出按鈕
     submit_button = st.form_submit_button(label='🚀 確認送出訂單')
 
-# --- 7. 送出後的邏輯 (Backend Logic) ---
+# --- 7. 送出後的邏輯 (正式串接 Google Sheets) ---
 if submit_button:
     if not name or not phone:
         st.error("❌ 請記得填寫「稱呼」與「電話」，不然找不到人喔！")
     else:
-        # 計算總金額 (簡單範例)
+        # 計算總金額
         total_price = (qty_sesame * 200) + (qty_cookie * 180)
         
-        st.success(f"✅ 訂單已送出！謝謝 {name} 的支持！")
-        st.balloons() # 放氣球慶祝！
+        # 準備要傳送的資料 (JSON 格式)
+        order_data = {
+            "name": name,
+            "phone": phone,
+            "line_id": line_id,
+            "qty_sesame": qty_sesame,
+            "qty_cookie": qty_cookie,
+            "total_price": total_price,
+            "notes": notes,
+            "delivery": delivery_method
+        }
         
-        # 顯示訂單確認資訊 (這裡之後可以改成傳送到 Google Sheet)
-        st.write("---")
-        st.markdown(f"**訂單摘要：**")
-        st.write(f"- 麥芽芝麻糖：{qty_sesame} 包")
-        st.write(f"- 好運雪Q餅：{qty_cookie} 包")
-        st.markdown(f"### 💰 預計總金額：NT$ {total_price}")
-        st.write("我們將會盡快透過電話或 LINE 與您聯繫出貨事宜。")
-        
-        # --- (進階功能預告) ---
-        # 下一步：這裡我們會加一段程式碼，把這些資料自動寫入 Google Sheets
+        # 顯示處理中... (給客人一點儀式感)
+        with st.spinner("📦 正在把訂單傳送給柴寶店長..."):
+            try:
+                # 這是你剛剛做好的 Apps Script 網址
+                gas_url = "https://script.google.com/macros/s/AKfycbzcSRl5tRsNqRvXhrtwFfT3ebS23AsouM2WIKW1EZhROWdFgmCr_N4mywo9rV_1ap8/exec" 
+                
+                # 發送 POST 請求
+                response = requests.post(gas_url, json=order_data)
+                
+                # 判斷是否成功
+                if response.status_code == 200:
+                    st.success(f"✅ 訂單已送出！謝謝 {name} 的支持！")
+                    st.balloons() # 放氣球慶祝！
+                    
+                    st.write("---")
+                    st.markdown(f"**訂單摘要：**")
+                    st.write(f"- 麥芽芝麻糖：{qty_sesame} 包")
+                    st.write(f"- 好運雪Q餅：{qty_cookie} 包")
+                    st.markdown(f"### 💰 預計總金額：NT$ {total_price}")
+                    st.write("我們將會盡快透過電話或 LINE 與您聯繫出貨事宜。")
+                else:
+                    st.error("連線發生錯誤，請截圖此畫面傳給我們！")
+            except Exception as e:
+                st.error(f"傳送失敗，請檢查網路或是稍後再試：{e}")
