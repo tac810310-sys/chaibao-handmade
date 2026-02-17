@@ -5,66 +5,113 @@ import requests
 # --- 1. 網頁設定 (Page Config) ---
 st.set_page_config(
     page_title="柴寶手作 | 招財甜點專賣",
-    page_icon="🍬",  # 之後可以換成你的 LOGO 小圖
-    layout="centered", # 手機版用 centered 比較好看，不會太寬
+    page_icon="🍬",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. 自訂 CSS 樣式 (讓介面更漂亮) ---
-# 隱藏 Streamlit 預設選單和 Footer，並調整字體大小
-hide_menu_style = """
+# --- 2. 視覺美化 CSS (裝修工程) ---
+st.markdown("""
     <style>
+    /* 全站背景：淡奶油色，看了就想吃甜點 */
+    .stApp {
+        background-color: #FFFDF5;
+        background-image: radial-gradient(#FFE0B2 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+    
+    /* 隱藏預設選單 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 自訂標題樣式 */
-    .title-text {
-        font-size: 40px !important;
-        font-weight: bold;
-        color: #D35400; /* 暖橘色，呼應品牌色 */
+    /* 標題樣式：深咖啡色，圓潤感 */
+    h1 {
+        color: #5D4037 !important;
+        font-family: 'Microsoft JhengHei', sans-serif;
         text-align: center;
-        margin-bottom: 0px;
+        font-weight: 800;
+        text-shadow: 2px 2px 0px #FFCC80;
     }
-    .slogan-text {
-        font-size: 20px !important;
-        color: #555555;
-        text-align: center;
-        margin-top: -10px;
-        margin-bottom: 20px;
-        font-style: italic;
+    
+    /* 副標題樣式 */
+    h2, h3 {
+        color: #E65100 !important;
+        font-family: 'Microsoft JhengHei', sans-serif;
+        font-weight: 600;
     }
+    
+    /* 商品卡片：加上陰影和圓角，像張精緻的菜單 */
     .product-card {
-        background-color: #FEF9E7; /* 淡黃色背景 */
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #F5CBA7;
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 2px solid #FFECB3;
         text-align: center;
+        transition: transform 0.2s;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        border-color: #FF9800;
+    }
+    
+    /* 按鈕美化：漸層橘色，像金元寶一樣亮眼 */
+    div.stButton > button {
+        background: linear-gradient(to bottom, #FF9800 5%, #F57C00 100%);
+        background-color: #FF9800;
+        border-radius: 20px;
+        border: 2px solid #E65100;
+        display: inline-block;
+        cursor: pointer;
+        color: #ffffff;
+        font-family: 'Microsoft JhengHei', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px 24px;
+        text-decoration: none;
+        width: 100%;
+        box-shadow: 0px 4px 0px #BF360C;
+    }
+    div.stButton > button:active {
+        position: relative;
+        top: 4px;
+        box-shadow: 0px 0px 0px #BF360C;
+    }
+    
+    /* 輸入框美化 */
+    .stTextInput > div > div > input {
+        border-radius: 10px;
+        border: 1px solid #FFCC80;
+    }
+    
+    /* 成功訊息背景 */
+    .stSuccess {
+        background-color: #E8F5E9;
+        border-left: 5px solid #2E7D32;
     }
     </style>
-"""
-st.markdown(hide_menu_style, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # --- 3. 頂部 Hero Section (LOGO 與 標語) ---
-col1, col2, col3 = st.columns([1, 2, 1]) # 置中排版技巧
+col1, col2, col3 = st.columns([1, 6, 1])
 
 with col2:
-    # 這裡預設會找一張叫 logo.png 的圖，如果找不到會顯示提示
     try:
-        #image = Image.open("logo.png") 
-        #st.image(image, use_column_width=True) # 實際上線請解開這兩行
-        st.header("🖼️ (LOGO圖片區)") # 測試用佔位符
+        # 顯示你的 LOGO
+        image = Image.open("logo.png") 
+        st.image(image, use_container_width=True) 
     except:
-        st.warning("請在資料夾中放入 logo.png")
+        st.header("🐕 柴寶手作") # 如果找不到圖的備案
 
-st.markdown('<p class="title-text">柴寶手作</p>', unsafe_allow_html=True)
-st.markdown('<p class="slogan-text">✨ 一口甜甜．財運連連 ✨</p>', unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; margin-top: -20px; color: #8D6E63 !important;'>✨ 一口甜甜．財運連連 ✨</h3>", unsafe_allow_html=True)
 
-st.divider() # 分隔線
+st.write("") # 空行
+st.markdown("---") # 分隔線
 
 # --- 4. 品牌故事 (Story) ---
-st.subheader("🐕 關於柴寶手作")
-st.write(
+st.markdown("### 🐕 關於柴寶手作")
+st.info(
     """
     這是一個由 **黑柴「福祿」** 與 **喜鵲「喜寶」** 共同守護的美味小舖。
     
@@ -75,71 +122,76 @@ st.write(
     """
 )
 
-st.info("💡 **開幕慶！** 現在訂購滿 500 元，加送「招財試吃包」一份！")
+st.write("") 
 
-st.divider()
+# --- 5. 美味展示區 (Products - Card Style) ---
+st.markdown("### 🍬 熱銷財寶 (點心介紹)")
 
-# --- 5. 美味展示區 (Products) ---
-st.subheader("🍬 熱銷財寶")
-
-# 使用 Columns 建立並排的商品卡片
 c1, c2 = st.columns(2)
 
 with c1:
-    # 商品 A
-    st.markdown('<div class="product-card">', unsafe_allow_html=True)
-    st.write("### 🥜 麥芽芝麻糖")
-    st.caption("香濃芝麻 x 不黏牙麥芽")
-    st.write("NT$ 200 / 包")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # 使用 HTML 語法來做漂亮的卡片
+    st.markdown("""
+    <div class="product-card">
+        <div style="font-size: 50px;">🥜</div>
+        <h4>麥芽芝麻糖</h4>
+        <p style="color: #666; font-size: 14px;">嚴選黑芝麻 x 不黏牙麥芽<br>香氣濃郁，長輩最愛</p>
+        <h3 style="color: #D84315 !important;">NT$ 200</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
 with c2:
-    # 商品 B
-    st.markdown('<div class="product-card">', unsafe_allow_html=True)
-    st.write("### ☁️ 好運雪Q餅")
-    st.caption("像雲朵般的綿密口感")
-    st.write("NT$ 180 / 包")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="product-card">
+        <div style="font-size: 50px;">☁️</div>
+        <h4>好運雪Q餅</h4>
+        <p style="color: #666; font-size: 14px;">像雲朵般的綿密口感<br>鹹甜交織，一口接一口</p>
+        <h3 style="color: #D84315 !important;">NT$ 180</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.divider()
+st.write("")
+st.markdown("---")
 
 # --- 6. 訂購表單 (Order Form) ---
-st.subheader("📝 立即把財寶帶回家")
-st.write("請填寫下方訂購單，媽媽收到後會盡快與您聯繫確認！")
+st.markdown("### 📝 立即把財寶帶回家")
+st.write("👇 請填寫下方訂購單，媽媽收到後會盡快與您聯繫確認！")
 
 with st.form(key='order_form'):
-    # 客戶資料
-    st.markdown("**1. 聯絡資訊**")
-    name = st.text_input("您的稱呼 (必填)", placeholder="例如：王小明")
-    phone = st.text_input("聯絡電話 (必填)", placeholder="例如：0912-345-678")
+    # 分欄位讓表單看起來比較整齊
+    f1, f2 = st.columns(2)
+    with f1:
+        name = st.text_input("您的稱呼 (必填)", placeholder="例如：王小明")
+    with f2:
+        phone = st.text_input("聯絡電話 (必填)", placeholder="例如：0912-345-678")
+    
     line_id = st.text_input("LINE ID (選填，方便聯繫)")
     
-    # 訂購數量
-    st.markdown("**2. 選擇商品數量**")
-    qty_sesame = st.number_input("🥜 麥芽芝麻糖 (包)", min_value=0, value=1, step=1)
-    qty_cookie = st.number_input("☁️ 好運雪Q餅 (包)", min_value=0, value=0, step=1)
+    st.markdown("**🛒 選擇商品數量**")
     
-    # 取貨方式
-    st.markdown("**3. 取貨方式**")
+    q1, q2 = st.columns(2)
+    with q1:
+        qty_sesame = st.number_input("🥜 麥芽芝麻糖 (包)", min_value=0, value=1, step=1)
+    with q2:
+        qty_cookie = st.number_input("☁️ 好運雪Q餅 (包)", min_value=0, value=0, step=1)
+    
     delivery_method = st.radio(
-        "請選擇：",
+        "🚚 取貨方式：",
         ("7-11 店到店 (+60元)", "全家 店到店 (+60元)", "面交自取 (台南)")
     )
     
-    notes = st.text_area("備註事項", placeholder="例如：送禮用紙袋、不喜歡太甜...")
+    notes = st.text_area("備註事項", placeholder="例如：我要送禮，請幫我附提袋...")
     
-    # 送出按鈕
-    submit_button = st.form_submit_button(label='🚀 確認送出訂單')
+    # 送出按鈕 (CSS 已經幫它美化過了)
+    submit_button = st.form_submit_button(label='🚀 確認訂單')
 
-# --- 7. 送出後的邏輯 (正式串接 Google Sheets) ---
+# --- 7. 送出後的邏輯 ---
 if submit_button:
     if not name or not phone:
         st.error("❌ 請記得填寫「稱呼」與「電話」，不然找不到人喔！")
     else:
-        # 計算總金額
         total_price = (qty_sesame * 200) + (qty_cookie * 180)
         
-        # 準備要傳送的資料 (JSON 格式)
         order_data = {
             "name": name,
             "phone": phone,
@@ -151,27 +203,31 @@ if submit_button:
             "delivery": delivery_method
         }
         
-        # 顯示處理中... (給客人一點儀式感)
         with st.spinner("📦 正在把訂單傳送給柴寶店長..."):
             try:
-                # 這是你剛剛做好的 Apps Script 網址
+                # 你的 Apps Script 網址
                 gas_url = "https://script.google.com/macros/s/AKfycbzcSRl5tRsNqRvXhrtwFfT3ebS23AsouM2WIKW1EZhROWdFgmCr_N4mywo9rV_1ap8/exec" 
                 
-                # 發送 POST 請求
                 response = requests.post(gas_url, json=order_data)
                 
-                # 判斷是否成功
                 if response.status_code == 200:
                     st.success(f"✅ 訂單已送出！謝謝 {name} 的支持！")
-                    st.balloons() # 放氣球慶祝！
+                    st.balloons()
                     
-                    st.write("---")
-                    st.markdown(f"**訂單摘要：**")
-                    st.write(f"- 麥芽芝麻糖：{qty_sesame} 包")
-                    st.write(f"- 好運雪Q餅：{qty_cookie} 包")
-                    st.markdown(f"### 💰 預計總金額：NT$ {total_price}")
-                    st.write("我們將會盡快透過電話或 LINE 與您聯繫出貨事宜。")
+                    st.markdown("""
+                    <div style="background-color: #FFF; padding: 20px; border-radius: 10px; border: 2px dashed #FF9800;">
+                        <h3 style="text-align: center;">📜 訂單明細</h3>
+                        <ul>
+                            <li><b>麥芽芝麻糖：</b> {} 包</li>
+                            <li><b>好運雪Q餅：</b> {} 包</li>
+                        </ul>
+                        <hr>
+                        <h2 style="text-align: center; color: #D32F2F;">💰 總金額：NT$ {}</h2>
+                        <p style="text-align: center; color: #666;">我們將盡快透過電話或 LINE 聯繫您出貨！</p>
+                    </div>
+                    """.format(qty_sesame, qty_cookie, total_price), unsafe_allow_html=True)
+                    
                 else:
                     st.error("連線發生錯誤，請截圖此畫面傳給我們！")
             except Exception as e:
-                st.error(f"傳送失敗，請檢查網路或是稍後再試：{e}")
+                st.error(f"傳送失敗：{e}")
