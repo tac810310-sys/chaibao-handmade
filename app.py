@@ -232,9 +232,9 @@ with tab2:
         
         st.markdown("**🛒 選擇祝福份數**")
         c1, c2, c3 = st.columns(3)
-        q1 = c1.number_input("🖤 墨玉生輝 (1袋6入 / NT$200)", min_value=0)
-        q2 = c2.number_input("🌿 靜谷尋心 (1袋6入 / NT$180)", min_value=0)
-        q3 = c3.number_input("🌸 方寸留憶 (1袋6入 / NT$180)", min_value=0)
+        q1 = c1.number_input("🖤 墨玉生輝 (1袋6入 / NT$50)", min_value=0)
+        q2 = c2.number_input("🌿 靜谷尋心 (1袋6入 / NT$50)", min_value=0)
+        q3 = c3.number_input("🌸 方寸留憶 (1袋6入 / NT$50)", min_value=0)
         
         delivery = st.radio("🚚 取貨方式", ("7-11 店到店", "全家 店到店", "面交自取"))
         notes = st.text_area("想對媽媽說的悄悄話...")
