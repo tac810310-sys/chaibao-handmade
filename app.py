@@ -9,26 +9,47 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- 2. 圖片處理函數 (強力膠水) ---
+# --- 2. 圖片處理函數 ---
 def get_base64_image(image_path):
-    """將圖片轉為 HTML 可讀的編碼，讓它乖乖待在框框裡"""
     if not os.path.exists(image_path):
-        return "" # 如果找不到圖，就回傳空字串
+        return ""
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-# --- 3. 視覺樣式 (橘色卡片修正版) ---
+# --- 3. 視覺樣式 (手機版強力修復) ---
 st.markdown("""
     <style>
+    /* 全站背景 */
     .stApp { background-color: #FFFDF5; }
-    html, body, p, div, span, h1, h2, h3, h4 { 
+    
+    /* 強制全站字體 */
+    html, body, p, div, span, h1, h2, h3, h4, label, input, textarea { 
         font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif !important; 
     }
 
-    /* 分頁標籤 */
+    /* === 修正 1 & 3: 強制讓所有輸入框的「提示文字」與「標籤」顯色 === */
+    /* 針對 Streamlit 的 Label (標題) */
+    .stTextInput label, .stNumberInput label, .stTextArea label, .stRadio label {
+        color: #4E342E !important; /* 深咖啡色 */
+        font-size: 18px !important;
+        font-weight: bold !important;
+    }
+    
+    /* 針對輸入框內的文字 */
+    .stTextInput input, .stTextArea textarea, .stNumberInput input {
+        color: #3E2723 !important;
+    }
+    
+    /* 針對 Radio 選項文字 */
+    .stRadio div[role='radiogroup'] label div p {
+        color: #4E342E !important;
+        font-size: 16px !important;
+    }
+
+    /* === 分頁標籤 === */
     .stTabs [data-baseweb="tab-list"] { gap: 10px; width: 100%; }
     .stTabs [data-baseweb="tab"] {
-        height: 70px; font-size: 22px !important; font-weight: bold; flex: 1;
+        height: 70px; font-size: 20px !important; font-weight: bold; flex: 1;
         background-color: #FFF3E0; border-radius: 15px 15px 0 0; color: #5D4037;
     }
     .stTabs [aria-selected="true"] { 
@@ -41,9 +62,9 @@ st.markdown("""
     .five-elements { background-color: #FFF8E1; padding: 30px; border-radius: 20px; border: 2px dashed #FFB74D; margin-top: 30px; text-align: center; }
     .story-text { font-size: 19px !important; line-height: 1.8 !important; color: #5D4037; }
 
-    /* === 第二頁：橘色卡片 (圖片修正) === */
+    /* === 第二頁：橘色卡片 === */
     .orange-card {
-        background-color: #FFCC80; /* 暖橘色底 */
+        background-color: #FFCC80;
         border-radius: 30px;
         padding: 25px;
         margin-bottom: 40px;
@@ -52,32 +73,39 @@ st.markdown("""
         color: #3E2723;
         text-align: center;
     }
-
-    .card-title {
-        font-size: 28px; font-weight: 900; margin-bottom: 15px; letter-spacing: 2px; color: #000000;
-    }
-
-    /* 聚光燈框框 */
+    .card-title { font-size: 28px; font-weight: 900; margin-bottom: 15px; letter-spacing: 2px; color: #000000; }
     .spotlight-box {
-        background: radial-gradient(circle, #FFFFFF 30%, #E0E0E0 100%); /* 聚光燈效果 */
-        padding: 20px;
-        border-radius: 20px;
-        text-align: center;
-        margin-bottom: 20px;
+        background: radial-gradient(circle, #FFFFFF 30%, #E0E0E0 100%);
+        padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;
         border: 1px solid #B0BEC5;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* 內陰影讓框框更有深度 */
+    }
+    .product-img { width: 100%; max-width: 300px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    
+    /* 一般描述文字 */
+    .card-desc { font-size: 18px; line-height: 1.7; margin-bottom: 15px; font-weight: 500; text-align: justify; padding: 0 10px; }
+
+    /* === 修正 2: 詩句樣式 (電腦版預設) === */
+    .card-poem { 
+        font-size: 20px; font-weight: 900; line-height: 1.6; color: #1A237E; margin-top: 10px; 
     }
 
-    /* 確保圖片乖乖待在框框裡 */
-    .product-img {
-        width: 100%;
-        max-width: 300px; /* 限制最大寬度，避免圖片太大 */
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    /* === 手機版專屬調整 (當螢幕小於 768px 時觸發) === */
+    @media (max-width: 768px) {
+        .card-poem {
+            font-size: 16px !important; /* 手機上縮小字體 */
+            line-height: 1.5 !important;
+            white-space: pre-line; /* 確保換行正常 */
+        }
+        .card-desc {
+            font-size: 16px !important; /* 描述文字也稍微縮小 */
+        }
+        .card-title {
+            font-size: 24px !important; /* 標題適度縮小 */
+        }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 16px !important; /* 分頁標籤縮小以免擠壓 */
+        }
     }
-
-    .card-desc { font-size: 18px; line-height: 1.7; margin-bottom: 15px; font-weight: 500; text-align: justify; padding: 0 15px; }
-    .card-poem { font-size: 20px; font-weight: 900; line-height: 1.6; color: #1A237E; margin-top: 10px; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -93,7 +121,7 @@ st.markdown("<h3 style='text-align: center; color: #8D6E63; margin-top: -10px;'>
 tab1, tab2, tab3 = st.tabs(["📖 品牌故事", "🛒 美味下單", "💬 暖心留言"])
 
 # ==========================================
-# 分頁 1：品牌故事 (維持完美)
+# 分頁 1：品牌故事
 # ==========================================
 with tab1:
     st.markdown("### 👩‍🍳 柴寶緣起：媽媽的私房手藝")
@@ -159,13 +187,13 @@ with tab1:
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 分頁 2：美味下單 (圖片強力膠水修復版)
+# 分頁 2：美味下單 (修復版)
 # ==========================================
 with tab2:
     st.markdown("### ✨ 心靈祝禱系列")
     st.write("每一份點心，皆含有一份人生的祝福。")
 
-    # 預先讀取圖片 (防呆機制)
+    # 預先讀取圖片
     img_sesame = get_base64_image("sesame.png")
     img_matcha = get_base64_image("matcha.png")
     img_strawberry = get_base64_image("strawberry.png")
@@ -225,6 +253,8 @@ with tab2:
     # --- 訂購單 ---
     st.write("---")
     st.markdown("### 📝 福氣訂購單")
+    
+    # 這裡的文字標籤都已經被 CSS 強制上色了
     with st.form("order_form"):
         name = st.text_input("怎麼稱呼您？(必填)")
         phone = st.text_input("福氣專線 (電話)")
