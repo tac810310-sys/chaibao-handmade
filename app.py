@@ -232,9 +232,9 @@ with tab2:
         
         st.markdown("**🛒 選擇祝福份數**")
         c1, c2, c3 = st.columns(3)
-        q1 = c1.number_input("🖤 寒梅破曙 - 墨玉生輝 (NT$50)", min_value=0)
-        q2 = c2.number_input("🌿 幽靜鳥語 - 靜谷尋心 (NT$50)", min_value=0)
-        q3 = c3.number_input("🌸 緋紅初見 - 方寸留憶 (NT$50)", min_value=0)
+        q1 = c1.number_input("🖤 墨玉生輝 (1袋6入 / NT$200)", min_value=0)
+        q2 = c2.number_input("🌿 靜谷尋心 (1袋6入 / NT$180)", min_value=0)
+        q3 = c3.number_input("🌸 方寸留憶 (1袋6入 / NT$180)", min_value=0)
         
         delivery = st.radio("🚚 取貨方式", ("7-11 店到店", "全家 店到店", "面交自取"))
         notes = st.text_area("想對媽媽說的悄悄話...")
@@ -253,13 +253,13 @@ with tab2:
                     "name": name,
                     "phone": phone,
                     "line_id": line_id,
-                    "qty_sesame": q1,
-                    "qty_cookie": qty_cookie_total,
+                    "qty_moyu": q1,       # 墨玉生輝
+                    "qty_jinggu": q2,     # 靜谷尋心
+                    "qty_fangcun": q3,    # 方寸留憶
                     "total_price": total_price,
                     "notes": notes,
                     "delivery": delivery
-                }
-                
+                }                
                 with st.spinner("📦 正在把訂單傳送給柴寶店長..."):
                     try:
                         # 您的 Apps Script 網址
