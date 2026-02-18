@@ -130,7 +130,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### 🐶 巷弄小太陽：福祿 (Lulu)")
+    st.markdown("### 🐶 溫暖的黑柴：福祿 (Lulu)")
     lc1, lc2 = st.columns(2)
     with lc1:
         try: st.image("lulu_q.png", caption="Q版可愛祿祿", use_container_width=True)
@@ -149,7 +149,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("### 🐦 用愛重生：喜寶 (Bobo)")
+    st.markdown("### 🐦 霸氣的喜鵲：喜寶 (Bobo)")
     bc1, bc2 = st.columns(2)
     with bc1:
         try: st.image("bobo_q.png", caption="Q版可愛喜寶", use_container_width=True)
@@ -160,7 +160,7 @@ with tab1:
 
     st.markdown("""
     <div class="story-box" style="border-left: 8px solid #8D6E63;">
-        <h4 style="color: #6D4C41; margin-bottom: 10px;">🐦 用愛重生</h4>
+        <h4 style="color: #6D4C41; margin-bottom: 10px;">🐦 因愛重生的喜鵲</h4>
         <p class="story-text">
             喜寶是媽媽從鳥販手中救下的孩子。當時牠受了傷，瑟瑟發抖。媽媽心疼地覺得「如果也放出去也活不了」，所以決定收編。這個孤僻的小傢伙把所有的溫柔都留給了媽媽。<br>
             廚房忙時，牠會撒嬌叫<b>「咪～」的討肉絲吃</b>；聽到媽媽回家，牠總是第一個大叫迎接。<b>牠的叫聲，是我們家最安心的信號。</b>
@@ -246,7 +246,7 @@ with tab2:
             if not name or not phone:
                 st.error("❌ 請記得填寫「稱呼」與「電話」，不然找不到人喔！")
             else:
-                total_price = (q1 * 200) + (q2 * 180) + (q3 * 180)
+                total_price = (q1 * 50) + (q2 * 50) + (q3 * 50)
                 qty_cookie_total = q2 + q3
                 
                 order_data = {
