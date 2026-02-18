@@ -247,7 +247,6 @@ with tab2:
                 st.error("❌ 請記得填寫「稱呼」與「電話」，不然找不到人喔！")
             else:
                 total_price = (q1 * 50) + (q2 * 50) + (q3 * 50)
-                qty_cookie_total = q2 + q3
                 
                 order_data = {
                     "name": name,
