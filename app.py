@@ -16,51 +16,60 @@ def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-# --- 3. 視覺樣式 (手機版強力修復) ---
+# --- 3. 視覺樣式 (強制顯色修復版) ---
 st.markdown("""
     <style>
-    /* 全站背景 */
+    /* 1. 全站背景：溫潤奶油白 */
     .stApp { background-color: #FFFDF5; }
     
-    /* 強制全站字體 */
-    html, body, p, div, span, h1, h2, h3, h4, label, input, textarea { 
+    /* 2. 強制全站字體 */
+    html, body, p, div, span, h1, h2, h3, h4, h5, h6, label, input, textarea { 
         font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif !important; 
     }
 
-    /* === 修正 1 & 3: 強制讓所有輸入框的「提示文字」與「標籤」顯色 === */
-    /* 針對 Streamlit 的 Label (標題) */
-    .stTextInput label, .stNumberInput label, .stTextArea label, .stRadio label {
+    /* === 關鍵修復：強制所有標題變成深咖啡色 (無視深色模式) === */
+    h1, h2, h3, h4, h5, h6, .stMarkdown, p {
         color: #4E342E !important; /* 深咖啡色 */
+    }
+
+    /* === 輸入框修復：讓標籤與輸入文字強制顯色 === */
+    .stTextInput label, .stNumberInput label, .stTextArea label, .stRadio label {
+        color: #3E2723 !important; /* 標籤深色 */
         font-size: 18px !important;
         font-weight: bold !important;
     }
-    
-    /* 針對輸入框內的文字 */
     .stTextInput input, .stTextArea textarea, .stNumberInput input {
-        color: #3E2723 !important;
+        color: #3E2723 !important; /* 輸入文字深色 */
     }
     
-    /* 針對 Radio 選項文字 */
-    .stRadio div[role='radiogroup'] label div p {
-        color: #4E342E !important;
-        font-size: 16px !important;
-    }
-
-    /* === 分頁標籤 === */
+    /* === 分頁標籤美化 === */
     .stTabs [data-baseweb="tab-list"] { gap: 10px; width: 100%; }
     .stTabs [data-baseweb="tab"] {
         height: 70px; font-size: 20px !important; font-weight: bold; flex: 1;
-        background-color: #FFF3E0; border-radius: 15px 15px 0 0; color: #5D4037;
+        background-color: #FFF3E0; border-radius: 15px 15px 0 0; 
+        color: #5D4037 !important; /* 強制標籤文字深色 */
     }
     .stTabs [aria-selected="true"] { 
         background-color: #FF9800 !important; color: white !important; 
     }
 
-    /* 第一頁樣式 */
-    .mom-box { background-color: #FAFAFA; border: 2px dashed #BCAAA4; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
-    .story-box { background-color: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 15px; border-left: 8px solid #FFB300; margin: 20px 0; }
-    .five-elements { background-color: #FFF8E1; padding: 30px; border-radius: 20px; border: 2px dashed #FFB74D; margin-top: 30px; text-align: center; }
-    .story-text { font-size: 19px !important; line-height: 1.8 !important; color: #5D4037; }
+    /* === 第一頁樣式 === */
+    .mom-box { 
+        background-color: #FAFAFA; border: 2px dashed #BCAAA4; padding: 30px; 
+        border-radius: 20px; margin-bottom: 30px; 
+    }
+    .story-box { 
+        background-color: rgba(255, 255, 255, 0.9); padding: 25px; 
+        border-radius: 15px; border-left: 8px solid #FFB300; margin: 20px 0; 
+    }
+    .five-elements { 
+        background-color: #FFF8E1; padding: 30px; border-radius: 20px; 
+        border: 2px dashed #FFB74D; margin-top: 30px; text-align: center; 
+    }
+    .story-text { 
+        font-size: 19px !important; line-height: 1.8 !important; 
+        color: #5D4037 !important; 
+    }
 
     /* === 第二頁：橘色卡片 === */
     .orange-card {
@@ -73,7 +82,11 @@ st.markdown("""
         color: #3E2723;
         text-align: center;
     }
-    .card-title { font-size: 28px; font-weight: 900; margin-bottom: 15px; letter-spacing: 2px; color: #000000; }
+    .card-title { 
+        font-size: 28px !important; font-weight: 900 !important; 
+        margin-bottom: 15px; letter-spacing: 2px; 
+        color: #000000 !important; /* 強制標題全黑 */
+    }
     .spotlight-box {
         background: radial-gradient(circle, #FFFFFF 30%, #E0E0E0 100%);
         padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;
@@ -81,29 +94,31 @@ st.markdown("""
     }
     .product-img { width: 100%; max-width: 300px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     
-    /* 一般描述文字 */
-    .card-desc { font-size: 18px; line-height: 1.7; margin-bottom: 15px; font-weight: 500; text-align: justify; padding: 0 10px; }
-
-    /* === 修正 2: 詩句樣式 (電腦版預設) === */
-    .card-poem { 
-        font-size: 20px; font-weight: 900; line-height: 1.6; color: #1A237E; margin-top: 10px; 
+    /* 描述文字 */
+    .card-desc { 
+        font-size: 18px; line-height: 1.7; margin-bottom: 15px; 
+        font-weight: 500; text-align: justify; padding: 0 10px;
+        color: #3E2723 !important;
     }
 
-    /* === 手機版專屬調整 (當螢幕小於 768px 時觸發) === */
+    /* === 詩句樣式 (電腦版預設) === */
+    .card-poem { 
+        font-size: 20px; font-weight: 900; line-height: 1.6; 
+        color: #1A237E !important; /* 強制深藍色 */
+        margin-top: 10px; 
+    }
+
+    /* === 手機版專屬調整 (螢幕 < 768px 時) === */
     @media (max-width: 768px) {
         .card-poem {
-            font-size: 16px !important; /* 手機上縮小字體 */
+            font-size: 16px !important; /* 手機字體縮小 */
             line-height: 1.5 !important;
-            white-space: pre-line; /* 確保換行正常 */
         }
         .card-desc {
-            font-size: 16px !important; /* 描述文字也稍微縮小 */
+            font-size: 16px !important;
         }
         .card-title {
-            font-size: 24px !important; /* 標題適度縮小 */
-        }
-        .stTabs [data-baseweb="tab"] {
-            font-size: 16px !important; /* 分頁標籤縮小以免擠壓 */
+            font-size: 24px !important;
         }
     }
     </style>
@@ -187,13 +202,12 @@ with tab1:
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 分頁 2：美味下單 (修復版)
+# 分頁 2：美味下單 (橘色卡片修復版)
 # ==========================================
 with tab2:
     st.markdown("### ✨ 心靈祝禱系列")
     st.write("每一份點心，皆含有一份人生的祝福。")
 
-    # 預先讀取圖片
     img_sesame = get_base64_image("sesame.png")
     img_matcha = get_base64_image("matcha.png")
     img_strawberry = get_base64_image("strawberry.png")
@@ -254,7 +268,6 @@ with tab2:
     st.write("---")
     st.markdown("### 📝 福氣訂購單")
     
-    # 這裡的文字標籤都已經被 CSS 強制上色了
     with st.form("order_form"):
         name = st.text_input("怎麼稱呼您？(必填)")
         phone = st.text_input("福氣專線 (電話)")
