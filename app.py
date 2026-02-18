@@ -16,10 +16,10 @@ def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-# --- 3. 視覺樣式 (強制顯色修復版) ---
+# --- 3. 視覺樣式 (輸入框白底修復版) ---
 st.markdown("""
     <style>
-    /* 1. 全站背景：溫潤奶油白 */
+    /* 1. 全站背景 */
     .stApp { background-color: #FFFDF5; }
     
     /* 2. 強制全站字體 */
@@ -27,49 +27,48 @@ st.markdown("""
         font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif !important; 
     }
 
-    /* === 關鍵修復：強制所有標題變成深咖啡色 (無視深色模式) === */
-    h1, h2, h3, h4, h5, h6, .stMarkdown, p {
-        color: #4E342E !important; /* 深咖啡色 */
+    /* === 關鍵修復：強制所有文字顯色 (無視深色模式) === */
+    h1, h2, h3, h4, h5, h6, .stMarkdown, p, div {
+        color: #4E342E !important;
     }
 
-    /* === 輸入框修復：讓標籤與輸入文字強制顯色 === */
+    /* === 🌟 輸入框大修復：強制背景變白，文字變黑 🌟 === */
+    /* 針對 單行輸入框(TextInput) 與 數字輸入框(NumberInput) 與 多行輸入(TextArea) */
+    .stTextInput input, .stNumberInput input, .stTextArea textarea {
+        background-color: #FFFFFF !important; /* 強制背景白色 */
+        color: #000000 !important;            /* 強制文字黑色 */
+        border: 1px solid #D7CCC8 !important; /* 加個邊框比較明顯 */
+    }
+    
+    /* 針對 輸入框的標題 (Label) */
     .stTextInput label, .stNumberInput label, .stTextArea label, .stRadio label {
-        color: #3E2723 !important; /* 標籤深色 */
+        color: #3E2723 !important;
         font-size: 18px !important;
         font-weight: bold !important;
     }
-    .stTextInput input, .stTextArea textarea, .stNumberInput input {
-        color: #3E2723 !important; /* 輸入文字深色 */
+
+    /* 針對 選項按鈕 (Radio Button) */
+    .stRadio div[role='radiogroup'] label div p {
+        color: #4E342E !important;
+        font-size: 16px !important;
     }
-    
-    /* === 分頁標籤美化 === */
+
+    /* === 分頁標籤 === */
     .stTabs [data-baseweb="tab-list"] { gap: 10px; width: 100%; }
     .stTabs [data-baseweb="tab"] {
         height: 70px; font-size: 20px !important; font-weight: bold; flex: 1;
         background-color: #FFF3E0; border-radius: 15px 15px 0 0; 
-        color: #5D4037 !important; /* 強制標籤文字深色 */
+        color: #5D4037 !important;
     }
     .stTabs [aria-selected="true"] { 
         background-color: #FF9800 !important; color: white !important; 
     }
 
     /* === 第一頁樣式 === */
-    .mom-box { 
-        background-color: #FAFAFA; border: 2px dashed #BCAAA4; padding: 30px; 
-        border-radius: 20px; margin-bottom: 30px; 
-    }
-    .story-box { 
-        background-color: rgba(255, 255, 255, 0.9); padding: 25px; 
-        border-radius: 15px; border-left: 8px solid #FFB300; margin: 20px 0; 
-    }
-    .five-elements { 
-        background-color: #FFF8E1; padding: 30px; border-radius: 20px; 
-        border: 2px dashed #FFB74D; margin-top: 30px; text-align: center; 
-    }
-    .story-text { 
-        font-size: 19px !important; line-height: 1.8 !important; 
-        color: #5D4037 !important; 
-    }
+    .mom-box { background-color: #FAFAFA; border: 2px dashed #BCAAA4; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
+    .story-box { background-color: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 15px; border-left: 8px solid #FFB300; margin: 20px 0; }
+    .five-elements { background-color: #FFF8E1; padding: 30px; border-radius: 20px; border: 2px dashed #FFB74D; margin-top: 30px; text-align: center; }
+    .story-text { font-size: 19px !important; line-height: 1.8 !important; color: #5D4037 !important; }
 
     /* === 第二頁：橘色卡片 === */
     .orange-card {
@@ -82,44 +81,23 @@ st.markdown("""
         color: #3E2723;
         text-align: center;
     }
-    .card-title { 
-        font-size: 28px !important; font-weight: 900 !important; 
-        margin-bottom: 15px; letter-spacing: 2px; 
-        color: #000000 !important; /* 強制標題全黑 */
-    }
+    .card-title { font-size: 28px !important; font-weight: 900 !important; margin-bottom: 15px; letter-spacing: 2px; color: #000000 !important; }
     .spotlight-box {
         background: radial-gradient(circle, #FFFFFF 30%, #E0E0E0 100%);
         padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;
         border: 1px solid #B0BEC5;
     }
     .product-img { width: 100%; max-width: 300px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .card-desc { font-size: 18px; line-height: 1.7; margin-bottom: 15px; font-weight: 500; text-align: justify; padding: 0 10px; color: #3E2723 !important; }
     
-    /* 描述文字 */
-    .card-desc { 
-        font-size: 18px; line-height: 1.7; margin-bottom: 15px; 
-        font-weight: 500; text-align: justify; padding: 0 10px;
-        color: #3E2723 !important;
-    }
+    /* 詩句樣式 */
+    .card-poem { font-size: 20px; font-weight: 900; line-height: 1.6; color: #1A237E !important; margin-top: 10px; }
 
-    /* === 詩句樣式 (電腦版預設) === */
-    .card-poem { 
-        font-size: 20px; font-weight: 900; line-height: 1.6; 
-        color: #1A237E !important; /* 強制深藍色 */
-        margin-top: 10px; 
-    }
-
-    /* === 手機版專屬調整 (螢幕 < 768px 時) === */
+    /* 手機版調整 */
     @media (max-width: 768px) {
-        .card-poem {
-            font-size: 16px !important; /* 手機字體縮小 */
-            line-height: 1.5 !important;
-        }
-        .card-desc {
-            font-size: 16px !important;
-        }
-        .card-title {
-            font-size: 24px !important;
-        }
+        .card-poem { font-size: 16px !important; line-height: 1.5 !important; }
+        .card-desc { font-size: 16px !important; }
+        .card-title { font-size: 24px !important; }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -202,7 +180,7 @@ with tab1:
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 分頁 2：美味下單 (橘色卡片修復版)
+# 分頁 2：美味下單
 # ==========================================
 with tab2:
     st.markdown("### ✨ 心靈祝禱系列")
@@ -269,6 +247,7 @@ with tab2:
     st.markdown("### 📝 福氣訂購單")
     
     with st.form("order_form"):
+        # 這些文字標籤已被強制修復為深色
         name = st.text_input("怎麼稱呼您？(必填)")
         phone = st.text_input("福氣專線 (電話)")
         
