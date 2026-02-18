@@ -276,13 +276,50 @@ with tab2:
                         st.error(f"傳送失敗，請檢查網路或是稍後再試：{e}")
 
 # ==========================================
-# 分頁 3：暖心留言
+# 分頁 3：暖心留言 (視覺優化版！)
 # ==========================================
 with tab3:
-    st.markdown("### 💬 暖心留言板")
-    st.write("歡迎留下您對媽媽、福祿或喜寶的悄悄話。")
+    st.markdown("### 💌 給店長的悄悄話")
+    
+    # 1. 溫馨的介紹區塊 (使用類似故事板的樣式，增加親切感)
+    st.markdown("""
+    <div style="background-color: #FFF3E0; border-radius: 20px; padding: 20px; border: 2px dashed #FFB74D; text-align: center; margin-bottom: 20px;">
+        <h4 style="color: #E65100; margin-bottom: 5px;">💬 您的鼓勵，是我們最大的動力</h4>
+        <p style="color: #5D4037; font-size: 16px;">
+            不管是對媽媽手藝的稱讚、還是想對祿祿喜寶說說話，<br>
+            都歡迎寫在這裡。我們每一則都會認真看喔！
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 2. 顯示可愛圖片 (讓 Q 版祿祿出來打招呼，如果沒有圖會自動跳過不報錯)
+    c1, c2, c3 = st.columns([1, 1, 1])
+    with c2:
+        try: 
+            # 這裡設定寬度為 150，剛好適合手機與電腦
+            st.image("lulu_q.png", width=150)
+        except: pass
+
+    # 3. 留言表單 (輸入框會自動繼承我們之前設定好的白底黑字樣式)
     with st.form("msg_form"):
-        m_name = st.text_input("您的暱稱")
-        m_msg = st.text_area("想說的話...")
-        if st.form_submit_button("💌 送出留言"):
-            st.success("收到您的溫暖留言了！✨")
+        m_name = st.text_input("您的暱稱 (怎麼稱呼您？)")
+        m_msg = st.text_area("寫下您想說的話...", height=150)
+        
+        # 4. 送出後的漂亮回饋
+        # 這裡用 submit_msg 變數接住按鈕狀態
+        submit_msg = st.form_submit_button("💌 送出暖心留言")
+
+        if submit_msg:
+            if not m_msg:
+                st.warning("📭 信紙是空的喔！寫點什麼吧～")
+            else:
+                st.balloons() # 放氣球慶祝
+                st.success("✨ 收到您的溫暖留言了！我們會轉達給媽媽和毛孩們知道。")
+                
+                # 顯示一張漂亮的感謝卡
+                st.markdown(f"""
+                <div style="background-color:#FFF3E0; padding:20px; border-radius:15px; border:2px solid #FF9800; text-align:center; margin-top: 20px;">
+                    <h3 style="color:#E65100;">❤️ 感謝 {m_name if m_name else '善心人士'} ❤️</h3>
+                    <p style="color:#5D4037; font-size:18px;">您的留言讓我們心裡暖暖的！</p>
+                </div>
+                """, unsafe_allow_html=True)
