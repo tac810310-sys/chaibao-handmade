@@ -196,7 +196,7 @@ with tab2:
     # 卡片 1
     st.markdown(f"""
     <div class="orange-card">
-        <div class="card-title">寒梅破曙 - 墨玉生輝</div>
+        <div class="card-title">墨玉生輝 - 麥芽芝麻糖</div>
         <div class="spotlight-box"><img src="data:image/png;base64,{img_sesame}" class="product-img"></div>
         <div class="card-desc">麥芽與黑糖，混合著芝麻，枸杞，腰果與核桃仁，在恰當的火候上細心慢熬，猶如寒冬熬骨。<br>完成後芝麻裹著糖衣，變成了發亮的墨玉，如同酷寒過後的梅花，耀眼綻放。</div>
         <div class="card-poem">"酸甜苦辣人生路，運程總有起伏時。"<br>"願以糖衣化心苦，望爾莫忘初心路。"</div>
@@ -206,7 +206,7 @@ with tab2:
     # 卡片 2
     st.markdown(f"""
     <div class="orange-card">
-        <div class="card-title">幽靜鳥語 - 靜谷尋心</div>
+        <div class="card-title">靜谷尋心 - 抹茶雪Q餅</div>
         <div class="spotlight-box"><img src="data:image/png;base64,{img_matcha}" class="product-img"></div>
         <div class="card-desc">棉花糖的甜，中和了抹茶中些許的苦澀，清香又清甜。入口的甜，舌上的清香，喉中的回甘。猶如身在森林中，放鬆緊張的心情，讓自己短暫的休息。迎接接下來的挑戰。</div>
         <div class="card-poem">"忙忙碌碌過甲子，記家記外獨忘己。"<br>"願將此品送爾心，暫停世俗品香茗。"</div>
@@ -216,7 +216,7 @@ with tab2:
     # 卡片 3
     st.markdown(f"""
     <div class="orange-card">
-        <div class="card-title">緋紅初見 - 方寸留憶</div>
+        <div class="card-title">方寸留憶 - 草莓雪Q餅</div>
         <div class="spotlight-box"><img src="data:image/png;base64,{img_strawberry}" class="product-img"></div>
         <div class="card-desc">棉花糖的甜，加上了草莓的酸甜，雖甜卻不膩。入口的酸甜，不停留在喉間，甜中的後韻，只留存心中。猶如初戀的酸甜美好，或許不是陪伴一生的佳人，但是卻是人生中最難忘的相遇，最美好的回憶。</div>
         <div class="card-poem">"相逢初在束髮年，臉羞耳紅意綿綿。"<br>"雖伴老年不是君，初憶願留此心間。"</div>
