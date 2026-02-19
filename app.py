@@ -236,8 +236,8 @@ with tab2:
         st.markdown("**🛒 選擇祝福份數**")
         c1, c2, c3 = st.columns(3)
         q1 = c1.number_input("🖤 墨玉生輝 (1袋6入 / NT$50)", min_value=0)
-        q2 = c2.number_input("🌿 靜谷尋心 (1袋6入 / NT$50)", min_value=0)
-        q3 = c3.number_input("🌸 方寸留憶 (1袋6入 / NT$50)", min_value=0)
+        q2 = c2.number_input("🌿 靜谷尋心 (1袋5入 / NT$60)", min_value=0)
+        q3 = c3.number_input("🌸 方寸留憶 (1袋5入 / NT$60)", min_value=0)
         
         delivery = st.radio("🚚 取貨方式", ("7-11 店到店", "全家 店到店", "面交自取"))
         notes = st.text_area("想對媽媽說的悄悄話...")
@@ -249,7 +249,7 @@ with tab2:
             if not name or not phone:
                 st.error("❌ 請記得填寫「稱呼」與「電話」，不然找不到人喔！")
             else:
-                total_price = (q1 * 50) + (q2 * 50) + (q3 * 50)
+                total_price = (q1 * 50) + (q2 * 60) + (q3 * 60)
                 
                 order_data = {
                     "name": name,
@@ -279,50 +279,94 @@ with tab2:
                         st.error(f"傳送失敗，請檢查網路或是稍後再試：{e}")
 
 # ==========================================
-# 分頁 3：暖心留言 (視覺優化版！)
+# 分頁 3：暖心留言 (動態留言牆 - 便條紙 Q版設計！)
 # ==========================================
 with tab3:
-    st.markdown("### 💌 給店長的悄悄話")
+    st.markdown("### 💌 柴寶暖心留言牆")
     
-    # 1. 溫馨的介紹區塊 (使用類似故事板的樣式，增加親切感)
+    # 您的專屬留言板網址 (絕對安全，不影響訂單)
+    msg_gas_url = "https://script.google.com/macros/s/AKfycbyZnAfV_8JX1sEgWQhkgKrkgU3UmllmJKTuC_LbBJ12ZdholFOI72lID17Ffr59Q-fMAA/exec"
+    
+    # 預先讀取 Q 版圖片 (媽媽、以及祿祿喜寶合體圖)
+    img_mom_base64 = get_base64_image("mom_q.png")
+    img_lubo_base64 = get_base64_image("lubo_q.png")
+    
+    # 產生圖片的 HTML (設定為絕對位置，貼在角落)
+    mom_html = f'<img src="data:image/png;base64,{img_mom_base64}" style="position: absolute; top: 15px; right: 15px; width: 85px; z-index: 0; opacity: 0.95;">' if img_mom_base64 else ''
+    lubo_html = f'<img src="data:image/png;base64,{img_lubo_base64}" style="position: absolute; bottom: 10px; left: 10px; width: 110px; z-index: 0; opacity: 0.95;">' if img_lubo_base64 else ''
+
+    # --- 1. 溫馨介紹區塊 ---
     st.markdown("""
-    <div style="background-color: #FFF3E0; border-radius: 20px; padding: 20px; border: 2px dashed #FFB74D; text-align: center; margin-bottom: 20px;">
-        <h4 style="color: #E65100; margin-bottom: 5px;">💬 您的鼓勵，是我們最大的動力</h4>
-        <p style="color: #5D4037; font-size: 16px;">
-            不管是對媽媽手藝的稱讚、還是想對祿祿喜寶說說話，<br>
-            都歡迎寫在這裡。我們每一則都會認真看喔！
-        </p>
+    <div style="background-color: #FFF3E0; border-radius: 20px; padding: 20px; border: 2px dashed #FFB74D; text-align: center; margin-bottom: 30px;">
+        <h4 style="color: #E65100; margin-bottom: 5px;">💬 大家的溫暖鼓勵</h4>
+        <p style="color: #5D4037; font-size: 16px;">不管是對媽媽手藝的稱讚、還是想對祿祿喜寶說說話，每一則留言都是我們前進的動力！</p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # --- 2. 顯示歷史留言牆 (便條紙樣式) ---
+    st.markdown("<h4 style='color: #8D6E63;'>✨ 最新留言</h4>", unsafe_allow_html=True)
+    
+    with st.spinner("正在為您讀取留言牆..."):
+        try:
+            res = requests.get(msg_gas_url)
+            if res.status_code == 200:
+                messages = res.json()
+                
+                if isinstance(messages, list) and len(messages) > 0:
+                    for msg in reversed(messages):
+                        # === 完美復刻便條紙的魔法 ===
+                        st.markdown(f"""
+                        <div style="position: relative; background-color: #FDF8E7; border: 1px solid #EEDEA8; border-radius: 5px; padding: 20px; box-shadow: 3px 4px 8px rgba(0,0,0,0.08); margin-bottom: 25px; min-height: 200px; overflow: hidden;">
+                            {mom_html}
+                            {lubo_html}
+                            
+                            <div style="color: #5D4037; font-weight: bold; font-size: 17px; position: relative; z-index: 1;">
+                                留言者：{msg.get('name', '神秘客')}
+                            </div>
+                            
+                            <div style="color: #4E342E; font-size: 18px; line-height: 1.6; text-align: center; margin: 30px 90px 40px 110px; position: relative; z-index: 1; min-height: 60px; white-space: pre-wrap;">{msg.get('message', '')}</div>
+                            
+                            <div style="color: #8D6E63; font-size: 14px; position: absolute; bottom: 15px; right: 20px; z-index: 1;">
+                                日期：{msg.get('time', '')[:10]}
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.info("目前還沒有留言喔！快來當第一個留言的人吧！✨")
+        except Exception as e:
+            st.warning("目前暫時無法載入留言牆，請稍後再試。")
 
-    # 2. 顯示可愛圖片 (讓 Q 版祿祿出來打招呼，如果沒有圖會自動跳過不報錯)
-    c1, c2, c3 = st.columns([1, 1, 1])
-    with c2:
-        try: 
-            # 這裡設定寬度為 150，剛好適合手機與電腦
-            st.image("lulu_q.png", width=150)
-        except: pass
-
-    # 3. 留言表單 (輸入框會自動繼承我們之前設定好的白底黑字樣式)
+    st.write("---")
+    
+    # --- 3. 新增留言表單 ---
+    st.markdown("### ✍️ 寫下您的悄悄話")
     with st.form("msg_form"):
         m_name = st.text_input("您的暱稱 (怎麼稱呼您？)")
-        m_msg = st.text_area("寫下您想說的話...", height=150)
+        m_msg = st.text_area("想對媽媽、福祿或喜寶說的話...", height=100)
         
-        # 4. 送出後的漂亮回饋
-        # 這裡用 submit_msg 變數接住按鈕狀態
-        submit_msg = st.form_submit_button("💌 送出暖心留言")
-
+        submit_msg = st.form_submit_button("💌 送出留言")
+        
         if submit_msg:
             if not m_msg:
                 st.warning("📭 信紙是空的喔！寫點什麼吧～")
             else:
-                st.balloons() # 放氣球慶祝
-                st.success("✨ 收到您的溫暖留言了！我們會轉達給媽媽和毛孩們知道。")
-                
-                # 顯示一張漂亮的感謝卡
-                st.markdown(f"""
-                <div style="background-color:#FFF3E0; padding:20px; border-radius:15px; border:2px solid #FF9800; text-align:center; margin-top: 20px;">
-                    <h3 style="color:#E65100;">❤️ 感謝 {m_name if m_name else '善心人士'} ❤️</h3>
-                    <p style="color:#5D4037; font-size:18px;">您的留言讓我們心裡暖暖的！</p>
-                </div>
-                """, unsafe_allow_html=True)
+                msg_data = {
+                    "name": m_name if m_name else "善心人士",
+                    "message": m_msg
+                }
+                with st.spinner("把您的心意傳送中..."):
+                    try:
+                        post_res = requests.post(msg_gas_url, json=msg_data)
+                        if post_res.status_code == 200:
+                            st.balloons()
+                            st.success("✨ 收到您的溫暖留言了！")
+                            st.markdown("""
+                            <div style="background-color:#E8F5E9; padding:15px; border-radius:10px; border:1px solid #4CAF50; text-align:center;">
+                                <h4 style="color:#2E7D32;">感謝您的鼓勵！</h4>
+                                <p style="color:#2E7D32; margin-bottom:0;">(若要看到您的留言，請重新整理網頁即可顯示喔！)</p>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.error("傳送失敗，請稍後再試！")
+                    except Exception as e:
+                        st.error(f"連線發生問題：{e}")
