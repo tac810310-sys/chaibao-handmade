@@ -279,15 +279,15 @@ with tab2:
                         st.error(f"傳送失敗，請檢查網路或是稍後再試：{e}")
 
 # ==========================================
-# 分頁 3：暖心留言 (動態留言牆 - 便條紙 Q版設計！)
+# 分頁 3：暖心留言 (表單在上，留言在下版！)
 # ==========================================
 with tab3:
     st.markdown("### 💌 柴寶暖心留言牆")
     
-    # 您的專屬留言板網址 (絕對安全，不影響訂單)
+    # 您的專屬留言板網址 
     msg_gas_url = "https://script.google.com/macros/s/AKfycbyZnAfV_8JX1sEgWQhkgKrkgU3UmllmJKTuC_LbBJ12ZdholFOI72lID17Ffr59Q-fMAA/exec"
     
-    # 預先讀取 Q 版圖片 (媽媽、以及祿祿喜寶合體圖)
+    # 預先讀取 Q 版圖片
     img_mom_base64 = get_base64_image("mom_q.png")
     img_lubo_base64 = get_base64_image("lubo_q.png")
     
@@ -303,42 +303,7 @@ with tab3:
     </div>
     """, unsafe_allow_html=True)
     
-    # --- 2. 顯示歷史留言牆 (便條紙樣式) ---
-    st.markdown("<h4 style='color: #8D6E63;'>✨ 最新留言</h4>", unsafe_allow_html=True)
-    
-    with st.spinner("正在為您讀取留言牆..."):
-        try:
-            res = requests.get(msg_gas_url)
-            if res.status_code == 200:
-                messages = res.json()
-                
-                if isinstance(messages, list) and len(messages) > 0:
-                    for msg in reversed(messages):
-                        # === 完美復刻便條紙的魔法 ===
-                        st.markdown(f"""
-                        <div style="position: relative; background-color: #FDF8E7; border: 1px solid #EEDEA8; border-radius: 5px; padding: 20px; box-shadow: 3px 4px 8px rgba(0,0,0,0.08); margin-bottom: 25px; min-height: 200px; overflow: hidden;">
-                            {mom_html}
-                            {lubo_html}
-                            
-                            <div style="color: #5D4037; font-weight: bold; font-size: 17px; position: relative; z-index: 1;">
-                                留言者：{msg.get('name', '神秘客')}
-                            </div>
-                            
-                            <div style="color: #4E342E; font-size: 18px; line-height: 1.6; text-align: center; margin: 30px 90px 40px 110px; position: relative; z-index: 1; min-height: 60px; white-space: pre-wrap;">{msg.get('message', '')}</div>
-                            
-                            <div style="color: #8D6E63; font-size: 14px; position: absolute; bottom: 15px; right: 20px; z-index: 1;">
-                                日期：{msg.get('time', '')[:10]}
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                else:
-                    st.info("目前還沒有留言喔！快來當第一個留言的人吧！✨")
-        except Exception as e:
-            st.warning("目前暫時無法載入留言牆，請稍後再試。")
-
-    st.write("---")
-    
-    # --- 3. 新增留言表單 ---
+    # --- 2. 新增留言表單 (移到上面來囉！) ---
     st.markdown("### ✍️ 寫下您的悄悄話")
     with st.form("msg_form"):
         m_name = st.text_input("您的暱稱 (怎麼稱呼您？)")
@@ -360,13 +325,41 @@ with tab3:
                         if post_res.status_code == 200:
                             st.balloons()
                             st.success("✨ 收到您的溫暖留言了！")
+                            # 提示文字改成「往下看」，因為留言會自動出現！
                             st.markdown("""
-                            <div style="background-color:#E8F5E9; padding:15px; border-radius:10px; border:1px solid #4CAF50; text-align:center;">
+                            <div style="background-color:#E8F5E9; padding:15px; border-radius:10px; border:1px solid #4CAF50; text-align:center; margin-bottom:20px;">
                                 <h4 style="color:#2E7D32;">感謝您的鼓勵！</h4>
-                                <p style="color:#2E7D32; margin-bottom:0;">(若要看到您的留言，請重新整理網頁即可顯示喔！)</p>
+                                <p style="color:#2E7D32; margin-bottom:0;">(往下滑，您的留言已經熱騰騰地上牆囉！)</p>
                             </div>
                             """, unsafe_allow_html=True)
                         else:
                             st.error("傳送失敗，請稍後再試！")
                     except Exception as e:
                         st.error(f"連線發生問題：{e}")
+
+    st.write("---")
+    
+    # --- 3. 顯示歷史留言牆 (移到下方！) ---
+    st.markdown("<h4 style='color: #8D6E63;'>✨ 柴寶歷史留言牆</h4>", unsafe_allow_html=True)
+    
+    with st.spinner("正在為您讀取留言牆..."):
+        try:
+            res = requests.get(msg_gas_url)
+            if res.status_code == 200:
+                messages = res.json()
+                
+                if isinstance(messages, list) and len(messages) > 0:
+                    for msg in reversed(messages):
+                        st.markdown(f"""
+                        <div style="position: relative; background-color: #FDF8E7; border: 1px solid #EEDEA8; border-radius: 5px; padding: 20px; box-shadow: 3px 4px 8px rgba(0,0,0,0.08); margin-bottom: 25px; min-height: 200px; overflow: hidden;">
+                            {mom_html}
+                            {lubo_html}
+                            <div style="color: #5D4037; font-weight: bold; font-size: 17px; position: relative; z-index: 1;">留言者：{msg.get('name', '神秘客')}</div>
+                            <div style="color: #4E342E; font-size: 18px; line-height: 1.6; text-align: center; margin: 30px 90px 40px 110px; position: relative; z-index: 1; min-height: 60px; white-space: pre-wrap;">{msg.get('message', '')}</div>
+                            <div style="color: #8D6E63; font-size: 14px; position: absolute; bottom: 15px; right: 20px; z-index: 1;">日期：{msg.get('time', '')[:10]}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.info("目前還沒有留言喔！快來當第一個留言的人吧！✨")
+        except Exception as e:
+            st.warning("目前暫時無法載入留言牆，請稍後再試。")
