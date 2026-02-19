@@ -114,7 +114,7 @@ st.markdown("<h3 style='text-align: center; color: #8D6E63; margin-top: -10px;'>
 tab1, tab2, tab3 = st.tabs(["📖 關於柴寶", "🛒 美味下單", "💬 暖心留言"])
 
 # ==========================================
-# 分頁 1：品牌故事 (完整修復回歸！)
+# 分頁 1：品牌故事 (完整補回取名故事！)
 # ==========================================
 with tab1:
     st.markdown("### 👩‍🍳 柴寶緣起：媽媽的私房手藝")
@@ -125,15 +125,19 @@ with tab1:
         <p class="story-text">
             起初，這只是一份媽媽對家人的私房愛。<br><br>
             因為覺得外面的糖果價格不斐，成分又標示不清，熱愛料理的媽媽心想：<b>「既然家人愛吃，那就自己動手做吧！用最好的料，吃得才安心。」</b><br><br>
-            於是媽媽開始鑽研食譜，當第一鍋「黑芝麻糖」出爐，那股濃郁的香氣，立刻征服了左鄰右舍。大家一吃成主顧，紛紛驚呼：「這比外面的還好吃！」在親友的熱情推坑下，<b>【柴寶手作】</b>就這樣在大家的期待與祝福中，溫馨誕生了。
+            當第一鍋「黑芝麻糖」出爐，那股濃郁的香氣立刻征服了左鄰右舍。大家一吃成主顧，紛紛驚呼：「這比外面的還好吃！」在親友的熱情推坑下，<b>【柴寶手作】</b>就這樣在大家的期待與祝福中，溫馨誕生了。
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### 🐶 溫暖的黑柴：福祿 (Lulu)")
+    # --- 這裡完美補回您遺失的重要標題 ---
+    st.markdown("### 🐾 取名故事，兩位毛孩的溫柔守護")
+    st.markdown("<p class='story-text' style='margin-bottom: 20px;'>「柴寶」這個名字，來自我們家最不可或缺的兩位毛孩成員——黑柴「福祿」與喜鵲「喜寶」。</p>", unsafe_allow_html=True)
+    
+    st.markdown("<h4 style='color: #8D6E63; margin-top: 10px;'>🐶 巷弄小太陽：福祿 (Lulu)</h4>", unsafe_allow_html=True)
     lc1, lc2 = st.columns(2)
     with lc1:
-        try: st.image("lulu_q.png", caption="Q版可愛祿祿", use_container_width=True)
+        try: st.image("lulu_q.png", caption="Q版店長祿祿", use_container_width=True)
         except: st.info("缺少 lulu_q.png")
     with lc2:
         try: st.image("lulu_real.png", caption="帥氣祿祿本尊", use_container_width=True)
@@ -149,28 +153,28 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("### 🐦 霸氣的喜鵲：喜寶 (Bobo)")
+    st.markdown("<h4 style='color: #8D6E63; margin-top: 20px;'>🐦 用愛重生：喜寶 (Bobo)</h4>", unsafe_allow_html=True)
     bc1, bc2 = st.columns(2)
     with bc1:
-        try: st.image("bobo_q.png", caption="Q版可愛喜寶", use_container_width=True)
+        try: st.image("bobo_q.png", caption="Q版喜寶", use_container_width=True)
         except: st.info("缺少 bobo_q.png")
     with bc2:
-        try: st.image("bobo_real.png", caption="霸氣喜寶本尊", use_container_width=True)
+        try: st.image("bobo_real.png", caption="喜寶本尊", use_container_width=True)
         except: st.info("缺少 bobo_real.png")
 
     st.markdown("""
     <div class="story-box" style="border-left: 8px solid #8D6E63;">
-        <h4 style="color: #6D4C41; margin-bottom: 10px;">🐦 因愛重生的喜鵲</h4>
+        <h4 style="color: #6D4C41; margin-bottom: 10px;">🐦 用愛灌溉的奇蹟</h4>
         <p class="story-text">
-            喜寶是媽媽從鳥販手中救下的孩子。當時牠受了傷，瑟瑟發抖。媽媽心疼地覺得「如果也放出去也活不了」，所以決定收編。這個孤僻的小傢伙把所有的溫柔都留給了媽媽。<br>
-            廚房忙時，牠會撒嬌叫<b>「咪～」的討肉絲吃</b>；聽到媽媽回家，牠總是第一個大叫迎接。<b>牠的叫聲，是我們家最安心的信號。</b>
+            喜寶是媽媽從鳥販手中救下的孩子。當時牠受了傷，瑟瑟發抖。媽媽心疼收編後，這個孤僻的小傢伙把所有的溫柔都留給了媽媽。<br>
+            廚房忙時，牠會撒嬌叫<b>「咪～」</b>；聽到媽媽回家，牠總是第一個大叫迎接。<b>牠的叫聲，是我們家最安心的信號。</b>
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("""
     <div class="five-elements">
-        <h4 style="color: #E65100; font-size: 24px;">✨ 五行相生．財運滾滾</h4>
+        <h4 style="color: #E65100; font-size: 24px;">✨ 五行相生．財寶滾滾</h4>
         <p class="story-text">
             黑柴屬水，水生木（柴），木生火（手作），火生土（財庫），土生金（財寶）。<br>
             福祿的笑容帶來了「人氣」，喜寶的重生帶來了「福氣」。<br>
@@ -178,7 +182,6 @@ with tab1:
         </p>
     </div>
     """, unsafe_allow_html=True)
-
 # ==========================================
 # 分頁 2：美味下單 (使用確認好的 GAS 連線)
 # ==========================================
